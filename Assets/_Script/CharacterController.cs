@@ -7,34 +7,38 @@ using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class CharacterController : MonoBehaviour
 {
-    public float speed = 5f;
-    public float sensitivity = 2f;
-    public Transform _cam;
-    public float verticalLookRange = 80f; // Set your desired vertical look range in degrees
+    public float speed = 5f;  // Adjust this value to set the movement speed.
+    public float sensitivity = 2f;  // Adjust this value to set the camera sensitivity.
+    public Transform playerCamera;
 
+    private Rigidbody rb;
     private float rotationX = 0f;
 
-    private void Update()
+    void Start()
     {
-        // Get input from the player
-        float horizontalMovement = Input.GetAxis("Horizontal");
-        float verticalMovement = Input.GetAxis("Vertical");
+        rb = GetComponent<Rigidbody>();
+        Cursor.lockState = CursorLockMode.Locked;  // Locks the cursor to the center of the screen.
+    }
 
-        // Move the player
-        Vector3 movement = new Vector3(horizontalMovement, 0, verticalMovement) * speed * Time.deltaTime;
-        transform.Translate(movement);
+    void Update()
+    {
+        // Player movement
+        float horizontalInput = Input.GetAxisRaw("Horizontal");
+        float verticalInput = Input.GetAxisRaw("Vertical");
+        Vector3 movement = new Vector3(horizontalInput, 0f, verticalInput).normalized;
+        rb.AddForce(transform.TransformDirection(movement) * speed);
 
-        // Rotate the player based on mouse input
-        float mouseX = Input.GetAxis("Mouse X");
-        float mouseY = Input.GetAxis("Mouse Y");
+        // Player camera rotation
+        float mouseX = Input.GetAxis("Mouse X") * sensitivity;
+        float mouseY = Input.GetAxis("Mouse Y") * sensitivity;
 
-        // Rotate the player around the Y-axis
-        transform.Rotate(Vector3.up * mouseX * sensitivity);
+        // Rotate the player around the Y-axis (horizontal movement)
+        transform.Rotate(Vector3.up * mouseX);
 
-        // Rotate the camera around the X-axis (vertical rotation)
-        rotationX -= mouseY * sensitivity;
-        rotationX = Mathf.Clamp(rotationX, -verticalLookRange, verticalLookRange);
+        // Rotate the camera around the X-axis (vertical movement), with clamping to prevent over-rotation
+        rotationX -= mouseY;
+        rotationX = Mathf.Clamp(rotationX, -90f, 90f);
 
-        _cam.localRotation = Quaternion.Euler(rotationX, 0, 0);
+        playerCamera.localRotation = Quaternion.Euler(rotationX, 0f, 0f);
     }
 }
