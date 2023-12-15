@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4063081703131834092}
   - component: {fileID: 4577185835579181486}
+  - component: {fileID: 2997618456904666678}
   m_Layer: 0
   m_Name: Desk_A
   m_TagString: Untagged
@@ -57,6 +58,27 @@ LODGroup:
     renderers:
     - renderer: {fileID: 7900819692715408405}
   m_Enabled: 1
+--- !u!65 &2997618456904666678
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3686521633176009814}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.61073995, y: 0.65303135, z: 0.40501097}
+  m_Center: {x: 0.000000029802322, y: 0.32651567, z: 0.00015065074}
 --- !u!1 &3796813386324169702
 GameObject:
   m_ObjectHideFlags: 0

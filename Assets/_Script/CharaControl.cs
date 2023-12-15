@@ -11,6 +11,12 @@ public class CharaControl : MonoBehaviour
     private float rotationX = 0f;
     private CharacterController characterController;
 
+    HideUnderTable HideUnderTable = null;
+
+    private void Awake()
+    {
+        HideUnderTable = GameObject.FindAnyObjectByType<HideUnderTable>();
+    }
     private void Start()
     {
         characterController = GetComponent<CharacterController>();
@@ -18,6 +24,19 @@ public class CharaControl : MonoBehaviour
 
     private void Update()
     {
+        // Rotate player
+        float mouseX = Input.GetAxis("Mouse X");
+        float mouseY = Input.GetAxis("Mouse Y");
+
+        transform.Rotate(Vector3.up * mouseX * sensitivity);
+
+        // Rotate camera
+        rotationX -= mouseY * sensitivity;
+        rotationX = Mathf.Clamp(rotationX, -verticalLookRange, verticalLookRange);
+
+        Camera.main.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
+
+        if (HideUnderTable.isHiding) return;
         float horizontalMovement = Input.GetAxis("Horizontal");
         float verticalMovement = Input.GetAxis("Vertical");
 
@@ -31,17 +50,7 @@ public class CharaControl : MonoBehaviour
         Vector3 combinedMovement = movement * speed * Time.deltaTime + Vector3.down * gravity * Time.deltaTime;
         characterController.Move(combinedMovement);
 
-        float mouseX = Input.GetAxis("Mouse X");
-        float mouseY = Input.GetAxis("Mouse Y");
 
-        // Rotate player
-        transform.Rotate(Vector3.up * mouseX * sensitivity);
-
-        // Rotate camera
-        rotationX -= mouseY * sensitivity;
-        rotationX = Mathf.Clamp(rotationX, -verticalLookRange, verticalLookRange);
-
-        Camera.main.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
     }
 
     private void Gravity()
