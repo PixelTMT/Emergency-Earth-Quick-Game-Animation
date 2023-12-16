@@ -6,9 +6,11 @@ public class HideUnderTable : MonoBehaviour
 {
     public float LerpSpeed = 5f;
     public Vector3 offset = Vector3.zero;
+    [SerializeField] GameObject HideTips;
 
     Vector3[] lastTransform;
     [HideInInspector] public bool isHiding = false;
+    [HideInInspector] public bool currentlyHiding = false;
     Transform player;
 
     float delayTimeHide;
@@ -21,16 +23,28 @@ public class HideUnderTable : MonoBehaviour
     }
     private void Update()
     {
-        if (isHiding)
+        if (Input.GetKeyDown(KeyCode.E) && isHiding && !currentlyHiding)
         {
-            player.position = Vector3.Lerp(player.position, this.transform.position + offset, LerpSpeed * Time.deltaTime);
-            if (Input.GetKeyDown(KeyCode.E) && Time.time > delayTimeHide)
-            {
-                StartCoroutine(unhide());
-                isHiding = false;
-            }
+            currentlyHiding = true;
+            delayTimeHide = Time.time + 2f;
+            StartCoroutine(hide());
+        }
+        else if (Input.GetKeyDown(KeyCode.E) && Time.time > delayTimeHide && currentlyHiding)
+        {
+            currentlyHiding = false;
+            StartCoroutine(unhide());
         }
 
+    }
+    IEnumerator hide()
+    {
+        float time = Time.time + 2;
+
+        while (Time.time < time)
+        {
+            player.position = Vector3.Lerp(player.position, this.transform.position + offset, LerpSpeed * Time.deltaTime);
+            yield return new WaitForEndOfFrame();
+        }
     }
     IEnumerator unhide()
     {
@@ -41,12 +55,26 @@ public class HideUnderTable : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
     }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            HideTips.SetActive(true);
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            HideTips.SetActive(false);
+            isHiding = false;
+        }
+    }
     private void OnTriggerStay(Collider other)
     {
         Debug.Log(other.tag);
-        if (other.CompareTag("Player") && Input.GetKeyDown(KeyCode.E) && !isHiding)
+        if (other.CompareTag("Player"))
         {
-            delayTimeHide = Time.time + 1f;
             isHiding = true;
         }
     }
