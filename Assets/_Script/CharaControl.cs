@@ -9,6 +9,8 @@ public class CharaControl : MonoBehaviour
     public float sensitivity = 2f;
     public float gravity = 9.8f;
 
+    public bool gempa_Start = false;
+
 
     private float verticalLookRange = 80f;
     private float rotationX = 0f;
@@ -26,7 +28,7 @@ public class CharaControl : MonoBehaviour
     private void Start()
     {
         characterController = GetComponent<CharacterController>();
-        StartCoroutine(ScreenShake(15));
+        if(gempa_Start) StartCoroutine(ScreenShake(20));
     }
 
     private void Update()
@@ -80,7 +82,7 @@ public class CharaControl : MonoBehaviour
             characterController.Move(Vector3.down * gravity * Time.deltaTime);
         }
     }
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
         if (other.CompareTag("Damage"))
         {
