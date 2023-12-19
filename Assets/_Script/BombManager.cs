@@ -12,6 +12,8 @@ public class BombManager : MonoBehaviour
     [SerializeField] float intensity = 5;
     [SerializeField] float intensityDropRate = 1;
 
+    [SerializeField] GameObject Explosion;
+    [SerializeField] AudioClip ExplosionSound;
     [SerializeField] TextMeshProUGUI TimerText;
     [SerializeField] GameObject MissionParent;
     [SerializeField] TextMeshProUGUI MissionText;
@@ -43,11 +45,17 @@ public class BombManager : MonoBehaviour
             bomb.Audio.Play();
             yield return new WaitForSeconds(bibIntervalSpeed - bibIntervalSpeed * (Time.time / timer));
         }
-        if(!hasDefuse) GameObject.FindAnyObjectByType<HeartManager>().ReduceHeart(5);
+        if (!hasDefuse)
+        {
+            GameObject.FindAnyObjectByType<HeartManager>().ReduceHeart(5);
+            Instantiate(Explosion, bomb.bomb.transform.position, Quaternion.identity);
+            bomb.Audio.PlayOneShot(ExplosionSound);
+        }
         direction.gameObject.SetActive(false);
         bomb.Light.enabled = false;
         TimerText.gameObject.SetActive(false);
         MissionParent.SetActive(false);
+        
     }
     private void Update()
     {
