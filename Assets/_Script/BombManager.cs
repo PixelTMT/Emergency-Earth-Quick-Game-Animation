@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
-using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class BombManager : MonoBehaviour
 {
@@ -10,8 +12,13 @@ public class BombManager : MonoBehaviour
     [SerializeField] float intensity = 5;
     [SerializeField] float intensityDropRate = 1;
 
+    [SerializeField] TextMeshProUGUI TimerText;
+    [SerializeField] GameObject MissionParent;
+    [SerializeField] TextMeshProUGUI MissionText;
+
     [HideInInspector] public bool hasClue = false;
     [HideInInspector] public bool hasDefuse = false;
+    [HideInInspector] public bool bombFound = false;
     Bomb bomb;
     Transform clue;
     Transform direction;
@@ -25,18 +32,22 @@ public class BombManager : MonoBehaviour
     }
     IEnumerator Start()
     {
+        TimerText.gameObject.SetActive(true);
+        MissionParent.SetActive(true);
         bomb.Light.enabled = true;
         bomb.bomb.SetActive(true);
-        
+        timer += (int)Time.time;
         while (Time.time <= timer && !hasDefuse)
         {
             bomb.Light.intensity = intensity;
             bomb.Audio.Play();
             yield return new WaitForSeconds(bibIntervalSpeed - bibIntervalSpeed * (Time.time / timer));
         }
+        if(!hasDefuse) GameObject.FindAnyObjectByType<HeartManager>().ReduceHeart(5);
         direction.gameObject.SetActive(false);
         bomb.Light.enabled = false;
-        
+        TimerText.gameObject.SetActive(false);
+        MissionParent.SetActive(false);
     }
     private void Update()
     {
@@ -45,8 +56,18 @@ public class BombManager : MonoBehaviour
         if(hasClue)
         {
             lookTo = bomb.bomb.transform.position;
+            MissionText.text = "You have found the clue code, return to the location of the bomb and defuse it.";
             clue.gameObject.SetActive(false);
         }
+        else if (bombFound)
+        {
+            MissionText.text = "Now look for clues in the form of codes to defuse the BOMB, the clues are located on the table rack.";
+        }
+        else
+        {
+            MissionText.text = "Find the location of the bomb by hearing the sound or following the arrow";
+        }
+        TimerText.text = $"Time : {Convert.ToInt32(timer - Time.time)}";
     }
     void setBomb()
     {
@@ -87,6 +108,7 @@ public class BombManager : MonoBehaviour
         if (!Physics.Raycast(ray, Vector3.Distance(Player.position, bomb.bomb.transform.position + Vector3.up)))
         {
             lookTo = clue.position;
+            bombFound = true;
             Debug.Log("LOSBOMB");
         }
     }

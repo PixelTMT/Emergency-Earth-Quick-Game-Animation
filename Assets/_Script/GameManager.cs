@@ -6,7 +6,11 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] GameObject gameFinishUI;
-    public bool gameOver = false;
+    public bool isGameOver = false;
+    public void Restart1()
+    {
+        SceneManager.LoadScene(0);
+    }
     public void Restart()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
@@ -24,7 +28,11 @@ public class GameManager : MonoBehaviour
     }
     public void gameFinish()
     {
-        gameOver = true;
+        isGameOver = true;
         gameFinishUI.SetActive(true);
+    }
+    public void gameOver()
+    {
+        isGameOver = true;
     }
 }

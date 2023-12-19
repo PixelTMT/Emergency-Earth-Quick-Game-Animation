@@ -50,7 +50,7 @@ public class CharaControl : MonoBehaviour
 
     private void Update()
     {
-        if (gameManager == null || gameManager.gameOver) return;
+        if (gameManager == null || gameManager.isGameOver) return;
         // Rotate player
         float mouseX = Input.GetAxis("Mouse X");
         float mouseY = Input.GetAxis("Mouse Y");
@@ -76,14 +76,6 @@ public class CharaControl : MonoBehaviour
         // movement
         Vector3 combinedMovement = movement * speed * Time.deltaTime + Vector3.down * gravity * Time.deltaTime;
         characterController.Move(combinedMovement);
-
-        if(bombManager != null)
-        {
-            if(Time.time > bombManager.timer)
-            {
-                heart.ReduceHeart(100);
-            }
-        }
     }
     
     public IEnumerator ScreenShake(float ScreenShakeTime, float ScreenShakeScale = 0.1f)
