@@ -19,8 +19,12 @@ public class GameManager : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            gameOver = true;
-            gameFinishUI.SetActive(true);
+            gameFinish();
         }
+    }
+    public void gameFinish()
+    {
+        gameOver = true;
+        gameFinishUI.SetActive(true);
     }
 }

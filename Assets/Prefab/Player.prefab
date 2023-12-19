@@ -170,7 +170,7 @@ CharacterController:
   m_Enabled: 1
   serializedVersion: 3
   m_Height: 2
-  m_Radius: 0.4
+  m_Radius: 0.3
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
@@ -192,6 +192,7 @@ MonoBehaviour:
   speed: 2.2
   sensitivity: 2
   gravity: 9.8
+  gempa_Start: 0
 --- !u!1 &5197387750590630183
 GameObject:
   m_ObjectHideFlags: 0

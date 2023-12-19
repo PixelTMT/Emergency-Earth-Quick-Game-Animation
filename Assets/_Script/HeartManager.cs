@@ -20,6 +20,7 @@ public class HeartManager : MonoBehaviour
     {
         if (gameManager == null) return;
 
+        updateHeartUI();
         if (!gameManager.gameOver)
         {
             if (heart <= 0)
@@ -36,7 +37,7 @@ public class HeartManager : MonoBehaviour
         {
             transform.GetChild(i).GetComponent<RawImage>().texture = Heart;
         }
-        for (int i = heart; i < 5; i++)
+        for (int i = heart; i >= 0 && i < 5; i++)
         {
             transform.GetChild(i).GetComponent<RawImage>().texture = EmptyHeart;
         }
@@ -44,11 +45,9 @@ public class HeartManager : MonoBehaviour
     public void ReduceHeart(int amount)
     {
         heart -= amount;
-        updateHeartUI();
     }
     public void AddHeart(int amount)
     {
         heart += amount;
-        updateHeartUI();
     }
 }

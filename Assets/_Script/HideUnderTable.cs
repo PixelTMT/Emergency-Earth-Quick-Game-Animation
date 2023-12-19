@@ -72,7 +72,6 @@ public class HideUnderTable : MonoBehaviour
     }
     private void OnTriggerStay(Collider other)
     {
-        Debug.Log(other.tag);
         if (other.CompareTag("Player"))
         {
             isHiding = true;
